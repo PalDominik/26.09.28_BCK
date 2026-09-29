@@ -89,7 +89,7 @@ async function UploadNewData(teacher : Datatypes_S)
 
 //#region
 
-async function DeleteById(Id : number)
+export async function DeleteById(Id : number)
 {
     let s_list = await Datacall()
     for(const data of s_list)
@@ -102,7 +102,7 @@ async function DeleteById(Id : number)
 
 }
 
-async function DeleteByName(name : string)
+export async function DeleteByName(name : string)
 {
     let s_list = await Datacall()
     for(const data of s_list)
