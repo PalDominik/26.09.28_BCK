@@ -12,6 +12,10 @@
   "dependencies": {
     "@types/node": "^22.20.2",
     "node.js": "^0.0.1-security",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }

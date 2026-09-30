@@ -5,6 +5,10 @@ import { cwd, stdin, stdout } from "process";
 import { error } from "console";
 const API_URL = "https://retoolapi.dev/bEvwsN/data";
 
+    const rl = RDL.createInterface({
+        input: stdin,
+        output: stdout
+    })
 
 async function Datacall() {
     const response  =  await fetch(API_URL);
@@ -28,12 +32,9 @@ export async function GetDataListed()
 
 //#region
 
-export function NewData()
+export async function NewData()
 {
-    const rl = RDL.createInterface({
-        input: stdin,
-        output: stdout
-    })
+
 
     let inputData : Datatypes_S = {
         
@@ -127,10 +128,7 @@ async function DeletedFromAPI(Id : number)
 
 export async function ExportAsJSON()
 {
-    const rl = RDL.createInterface({
-        input: stdin,
-        output: stdout
-    })
+
     rl.question("Hogyan akkarod elnevezni a fájlod? ", async (anwser) => {
         if(anwser === "")
         {
@@ -143,4 +141,10 @@ export async function ExportAsJSON()
             console.log("Exportálva!")
         }
     })
+}
+
+function askQuestion(question: string): Promise<string> {
+    return new Promise((resolve) => {
+        rl.question(question, resolve);
+    });
 }
