@@ -4,6 +4,7 @@ import { Datacall, DeleteById, DeleteByName, GetDataListed, UploadNewData } from
 import type { Datatypes_S } from "./Types.ts";
 import * as fs from "fs";
 
+
 let running : boolean = true;
 const m_rl = rdl.createInterface({
     input: stdin,
@@ -91,15 +92,35 @@ export async function NewData()
         Work_Day: ""
     };
     let valasz = await askQuestion("Tanár neve: ");
-    inputData.Teacher_Name = valasz;
+    if(valasz === "")
+    {
+        throw new Error("Nem lehet üres nevet adni!")
+    }
+    else{
+        inputData.Teacher_Name = valasz;
+    }
 
     valasz = await askQuestion("Óraszám: ")
+        if(valasz === "")
+    {
+        throw new Error("Nem lehet üres nevet adni!")
+    }
+    else{
         inputData.Class_Hour = parseInt(valasz);
+    }
 
-    valasz = await askQuestion("Melyik napon dolgozik?: ")
-        inputData.Work_Day = valasz;
+    const datum = Date.now()
 
-    console.log(`Tanár: ${inputData.Teacher_Name} | ${inputData.Work_Day} | ${inputData.Class_Hour}`)
+    // valasz = await askQuestion("Melyik napon dolgozik?: ")
+
+    // if(valasz === "")
+    // {
+    //     throw new Error("Nem lehet üres nevet adni!")
+    // }
+    // else{
+    //     inputData.Work_Day = valasz;
+    // }
+    // console.log(`Tanár: ${inputData.Teacher_Name} | ${inputData.Work_Day} | ${inputData.Class_Hour}`)
     UploadNewData(inputData)
     
     
@@ -113,7 +134,7 @@ export async function ExportAsJSON()
     {
         throw new Error("Nem lehet üres a fáljnak a neve!")
     }else{
-        fs.writeFileSync(`${faljnev}.txt`,(JSON.stringify(Datacall())))
+        fs.writeFileSync(`${faljnev}.json`,(JSON.stringify(await Datacall())))
     }
 }
 
