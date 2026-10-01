@@ -99,6 +99,7 @@ export async function NewData()
     valasz = await askQuestion("Melyik napon dolgozik?: ")
         inputData.Work_Day = valasz;
 
+    console.log(`Tanár: ${inputData.Teacher_Name} | ${inputData.Work_Day} | ${inputData.Class_Hour}`)
     UploadNewData(inputData)
     
     
