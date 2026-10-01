@@ -1,15 +1,10 @@
 import type {Datatypes, Datatypes_S} from "./Types.ts"
-import * as RDL from "readline"
 import * as fs from "fs"
-import { stdin, stdout } from "process";
+
 const API_URL = "https://retoolapi.dev/bEvwsN/data";
 
-    const rl = RDL.createInterface({
-        input: stdin,
-        output: stdout
-    })
 
-async function Datacall() {
+export async function Datacall() {
     const response  =  await fetch(API_URL);
     if(!response.ok)
     {
@@ -31,31 +26,9 @@ export async function GetDataListed()
 
 //#region
 
-export async function NewData()
-{
 
 
-    let inputData : Datatypes_S = {
-        
-        Teacher_Name: "",
-        Class_Hour: 0,
-        Work_Day: ""
-    };
-    let valasz = await askQuestion("Tanár neve: ");
-    inputData.Teacher_Name = valasz;
-
-    valasz = await askQuestion("Óraszám: ")
-        inputData.Class_Hour = parseInt(valasz);
-
-    valasz = await askQuestion("Melyik napon dolgozik?: ")
-        inputData.Work_Day = valasz;
-
-    UploadNewData(inputData)
-    
-    
-}
-
-async function UploadNewData(teacher : Datatypes_S)
+export async function UploadNewData(teacher : Datatypes_S)
 {
     await fetch(API_URL, {
         method: "POST",
@@ -103,25 +76,3 @@ async function DeletedFromAPI(Id : number)
 
 //#endregion
 
-export async function ExportAsJSON()
-{
-
-    rl.question("Hogyan akkarod elnevezni a fájlod? ", async (anwser) => {
-        if(anwser === "")
-        {
-            throw new Error("Nem lehet semmi a fálj neve!")
-        }
-        else{
-
-            let e_data : Datatypes[] = await Datacall();
-            fs.writeFileSync(anwser,e_data.toString(), "utf-8")
-            console.log("Exportálva!")
-        }
-    })
-}
-
-function askQuestion(question: string): Promise<string> {
-    return new Promise((resolve) => {
-        rl.question(question, resolve);
-    });
-}

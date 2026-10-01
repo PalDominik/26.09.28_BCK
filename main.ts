@@ -1,6 +1,8 @@
 import { stdin, stdout } from "process";
 import * as rdl from "readline";
-import { DeleteById, DeleteByName, ExportAsJSON, GetDataListed, NewData } from "./API_Work.ts";
+import { Datacall, DeleteById, DeleteByName, GetDataListed, UploadNewData } from "./API_Work.ts";
+import type { Datatypes_S } from "./Types.ts";
+import * as fs from "fs";
 
 let running : boolean = true;
 const m_rl = rdl.createInterface({
@@ -77,6 +79,44 @@ async function main() {
     m_rl.close();
 }
 
+//#region átpakolt
+export async function NewData()
+{
+
+
+    let inputData : Datatypes_S = {
+        
+        Teacher_Name: "",
+        Class_Hour: 0,
+        Work_Day: ""
+    };
+    let valasz = await askQuestion("Tanár neve: ");
+    inputData.Teacher_Name = valasz;
+
+    valasz = await askQuestion("Óraszám: ")
+        inputData.Class_Hour = parseInt(valasz);
+
+    valasz = await askQuestion("Melyik napon dolgozik?: ")
+        inputData.Work_Day = valasz;
+
+    UploadNewData(inputData)
+    
+    
+}
+
+export async function ExportAsJSON()
+{
+
+    let faljnev = await askQuestion("Mi legyen a fáljod neve?: ")
+    if(faljnev === "")
+    {
+        throw new Error("Nem lehet üres a fáljnak a neve!")
+    }else{
+        fs.writeFileSync(`${faljnev}.txt`,(JSON.stringify(Datacall())))
+    }
+}
+
+//#endregion
 
 //#region
 
