@@ -1,8 +1,7 @@
 import type {Datatypes, Datatypes_S} from "./Types.ts"
 import * as RDL from "readline"
 import * as fs from "fs"
-import { cwd, stdin, stdout } from "process";
-import { error } from "console";
+import { stdin, stdout } from "process";
 const API_URL = "https://retoolapi.dev/bEvwsN/data";
 
     const rl = RDL.createInterface({
@@ -42,36 +41,14 @@ export async function NewData()
         Class_Hour: 0,
         Work_Day: ""
     };
-    rl.question("Tanárnév: ", (anwser) => {
-        if(anwser === "")
-        {
-            throw new Error("Nem lehet üres a név!")
-            
-        }else{
-            inputData.Teacher_Name = anwser;
-        }
-    })
+    let valasz = await askQuestion("Tanár neve: ");
+    inputData.Teacher_Name = valasz;
 
-    rl.question("Óraszám: ", (anwser) => {
-        const forditas = parseInt(anwser)
-        if(forditas < 0 || forditas > 7)
-        {
-            throw new Error("Az óraszám csak 1 és 7 közzöt lehet!")
-            
-        }else{
-            inputData.Class_Hour = forditas
-        }
-    })
+    valasz = await askQuestion("Óraszám: ")
+        inputData.Class_Hour = parseInt(valasz);
 
-    rl.question("Munkanap: ", (anwser) => {
-    if(anwser === "")
-    {
-        throw new Error("Nem lehet üres a munkanap!")
-        
-    }else{
-        inputData.Work_Day = anwser
-    }
-    })
+    valasz = await askQuestion("Melyik napon dolgozik?: ")
+        inputData.Work_Day = valasz;
 
     UploadNewData(inputData)
     
