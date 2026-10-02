@@ -1,7 +1,7 @@
 import { stdin, stdout } from "process";
 import * as rdl from "readline";
 import { Datacall, DeleteById, DeleteByName, GetDataListed, UploadNewData } from "./API_Work.ts";
-import type { Datatypes_S } from "./Types.ts";
+import type { Datatypes_S } from "./helyettesites.ts";
 import * as fs from "fs";
 
 
@@ -53,7 +53,7 @@ async function main() {
                     }
 
                     default:
-                        console.log("Valami hiba történt törléskor!");
+                        console.log('\x1b[33m','Valami hiba történt törléskor!\x1b[0m');
                         break;
                 }
 
@@ -65,12 +65,12 @@ async function main() {
                 break;
 
             case 5:
-                console.log("Viszlát felhasználó!");
+                console.log('\x1b[36m','Viszlát felhasználó!\x1b[0m');
                 running = false;
                 break;
 
             default:
-                console.log("Ilyen opció nincs.");
+                console.log('\x1b[33m','Ilyen opció nincs.\x1b[0m');
                 break;
         }
 
@@ -94,7 +94,9 @@ export async function NewData()
     let valasz = await askQuestion("Tanár neve: ");
     if(valasz === "")
     {
-        throw new Error("Nem lehet üres nevet adni!")
+        // throw new Error("Nem lehet üres nevet adni!")
+        console.log('\x1b[31m','Nem lehet üres nevet adni!\n\x1b[0m')
+        main()
     }
     else{
         inputData.Teacher_Name = valasz;
@@ -103,13 +105,28 @@ export async function NewData()
     valasz = await askQuestion("Óraszám: ")
         if(valasz === "")
     {
-        throw new Error("Nem lehet üres nevet adni!")
+        // throw new Error("Nem lehet üres óraszámot adni!")
+        console.log('\x1b[31m','Nem lehet üres óraszámot adni!\n\x1b[0m')
+        main()
     }
     else{
         inputData.Class_Hour = parseInt(valasz);
     }
 
-    const datum = Date.now()
+    const datum_Lista : string[] = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"]
+
+    const datum = new Date();
+    let now = datum.getDay()
+    if(now !=6)
+    {
+        now++;
+    }
+    else
+    {
+        now = 0;
+    }
+    
+    inputData.Work_Day = datum_Lista[now]!;
 
     // valasz = await askQuestion("Melyik napon dolgozik?: ")
 
@@ -132,67 +149,13 @@ export async function ExportAsJSON()
     let faljnev = await askQuestion("Mi legyen a fáljod neve?: ")
     if(faljnev === "")
     {
-        throw new Error("Nem lehet üres a fáljnak a neve!")
+        // throw new Error("Nem lehet üres a fáljnak a neve!")
+        console.log('\x1b[31m','Nem lehet üres a fáljnak a neve!\n\x1b[0m')
+        main()
     }else{
         fs.writeFileSync(`${faljnev}.json`,(JSON.stringify(await Datacall())))
     }
 }
-
-//#endregion
-
-//#region
-
-// async function main()
-// {
-//     while(running)
-//     {
-//         console.log("Üdvözlöm felhasználó!\nVálasz a menüpontok közzül!")
-//         console.log("1. | felhasználok listázása.\n2. | új felhasználó hozzáadása.\n3. | felhasználo törlése .\n4. | lista exportálása.\n5. | kilépés.\n")
-//         m_rl.question("Kérem a válaszát: ", async (anwser) => {
-//             switch (parseInt(anwser)){
-//                 case 1:
-//                     GetDataListed();
-//                     break
-//                 case 2:
-//                     NewData()
-//                     break
-//                 case 3:
-//                     m_rl.question("Név(N) vagy ID(I) alapján akkarsz törölni?: ",(anwser) => {
-//                         switch(anwser)
-//                         {
-//                             case "N":
-//                                 m_rl.question("Nevet kérek: ", (anwser)=>{
-//                                     DeleteByName(anwser)
-//                                 })
-//                                 break;
-//                             case "I":
-//                                 m_rl.question("ID kérek: ", (anwser)=>{
-//                                     DeleteById(parseInt(anwser))
-
-//                                 })
-//                                 break;
-//                             default: 
-//                             console.log("Valami hibba történt törléskor!")
-//                             break
-//                         }
-//                     })
-//                     break;
-//                 case 4:
-//                     ExportAsJSON()
-//                     break;
-//                 case 5:
-//                     console.log("Viszlát felhasználó!")
-//                     running = false
-//                     break;
-//                 default: 
-//                 console.log("Ilyen opció nincs genyó!")
-//                 break
-//             }
-//             console.log("\n--------\n");
-//         })
-
-//     }
-// }
 
 //#endregion
 

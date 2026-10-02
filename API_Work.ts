@@ -1,4 +1,4 @@
-import type {Datatypes, Datatypes_S} from "./Types.ts"
+import type {Datatypes, Datatypes_S} from "./helyettesites.ts"
 import * as fs from "fs"
 
 const API_URL = "https://retoolapi.dev/bEvwsN/data";
